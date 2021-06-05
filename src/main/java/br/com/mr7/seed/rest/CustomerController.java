@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/customers")
 public class CustomerController {
@@ -15,7 +17,7 @@ public class CustomerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Customer save(@RequestBody  Customer customer){
+    public Customer save(@RequestBody @Valid Customer customer){
        return service.save(customer);
     }
 
@@ -29,4 +31,13 @@ public class CustomerController {
     public void delete(@PathVariable Long id){
         service.delete(id);
      }
+
+
+    @PutMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@PathVariable Long id,
+                       @RequestBody Customer customerUpdate){
+
+        service.update(id,customerUpdate);
+    }
 }

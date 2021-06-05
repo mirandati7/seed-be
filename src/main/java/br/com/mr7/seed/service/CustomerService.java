@@ -24,7 +24,7 @@ public class CustomerService {
     public Customer findByID(Long id){
         return repository
                     .findById(id)
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Cliente não encontrado"));
     }
 
     public void delete(Long id){
@@ -34,8 +34,21 @@ public class CustomerService {
                     return Void.TYPE;
                 })
                 .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND)
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Cliente não encontrado")
                 );
     }
+
+
+    public void update(Long id,Customer customerUpdate){
+        repository.findById(id)
+                .map(customer -> {
+                    customerUpdate.setId(customer.getId());
+                    return repository.save(customerUpdate);
+                }).orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Cliente não encontrado")
+                );
+    }
+
+
 
 }
